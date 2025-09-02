@@ -1,11 +1,10 @@
-# Filament Slider
+# Filament Slick Slider
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/abdelhamiderrahmouni/filament-slick-slider.svg?style=flat-square)](https://packagist.org/packages/abdelhamiderrahmouni/filament-slick-slider)
 [![Total Downloads](https://img.shields.io/packagist/dt/abdelhamiderrahmouni/filament-slick-slider.svg?style=flat-square)](https://packagist.org/packages/abdelhamiderrahmouni/filament-slick-slider)
 
-
-
-This component allows users to easily select a value or range of values by dragging a slider handle. It's ideal for settings where precise input is required, such as adjusting numerical values, controlling volume, or setting dates.
+This component lets users intuitively select single values or ranges by moving a slider handle.  
+It is perfect for scenarios requiring accurate input, such as setting numbers, adjusting audio levels, or satisfaction levels.
 
 ## Installation
 
@@ -33,7 +32,7 @@ InputSliderGroup::make()
 ```php
 InputSliderGroup::make()
 ->sliders([
-    InputSlider::make('min')
+    InputSlider::make('min'),
     InputSlider::make('max')
 ])
 ->label('Limit')
@@ -44,7 +43,7 @@ InputSliderGroup::make()
 ```php
 InputSliderGroup::make()
 ->sliders([
-    InputSlider::make('min')
+    InputSlider::make('min'),
     InputSlider::make('max')
 ])
 ->connect([
@@ -60,7 +59,7 @@ InputSliderGroup::make()
 ```php
 InputSliderGroup::make()
 ->sliders([
-    InputSlider::make('min')
+    InputSlider::make('min'),
     InputSlider::make('max')
 ])
 ->connect([
@@ -110,8 +109,10 @@ Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
 
 ## Credits
 
+- [Abdelhamid Errahmouni](https://github.com/abdelhamiderrahmouni)
 - [Rupadana](https://github.com/rupadana)
 - [All Contributors](../../contributors)
+- This package is a fork of [filament-slider](https://github.com/abdelhamiderrahmouni/filament-slick-slider) by [Rupadana](https://github.com/rupadana)
   
 ## License
 

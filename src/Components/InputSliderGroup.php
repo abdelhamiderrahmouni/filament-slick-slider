@@ -2,6 +2,7 @@
 
 namespace AbdelhamidErrahmouni\FilamentSlickSlider\Components;
 
+use Closure;
 use Error;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\Concerns\CanBeValidated;
@@ -20,40 +21,33 @@ class InputSliderGroup extends Component
 
     protected string $view = 'filament-slider::components.input-slider';
 
-    protected int $max = 10;
+    protected int | Closure $max = 10;
 
-    protected int $min = 0;
+    protected int | Closure $min = 0;
 
-    protected int $step = 1;
+    protected int | Closure $step = 1;
 
-    protected array $behaviour = ['drag', 'tap'];
+    protected array | Closure $behaviour = ['drag', 'tap'];
 
-    protected array $sliders = [];
+    protected array | Closure $sliders = [];
 
-    protected bool $snap = false;
+    protected bool | Closure $snap = false;
 
-    protected bool | array $connect = true;
+    protected bool | array | Closure $connect = true;
 
-    protected ?array $range = null;
+    protected array | Closure | null $range = null;
 
-    protected ?array $tooltips = null;
+    protected array | Closure | null $tooltips = null;
 
-    protected bool $isEnableTooltips = false;
+    protected bool $hasEnabledTooltips = false;
 
     public static function make(?string $label = null): static
     {
         $static = new static;
 
         return $static
-            ->label($label);
-    }
-
-    /**
-     * Get the value of max
-     */
-    public function getMax()
-    {
-        return $this->max;
+            ->label($label)
+            ->id('slider-input-' . str()->random(4));
     }
 
     /**
@@ -61,7 +55,7 @@ class InputSliderGroup extends Component
      *
      * @return self
      */
-    public function max($max)
+    public function max(int | Closure $max): static
     {
         $this->max = $max;
 
@@ -69,11 +63,11 @@ class InputSliderGroup extends Component
     }
 
     /**
-     * Get the value of min
+     * Get the value of max
      */
-    public function getMin()
+    public function getMax(): int
     {
-        return $this->min;
+        return (int) $this->evaluate($this->max);
     }
 
     /**
@@ -81,9 +75,30 @@ class InputSliderGroup extends Component
      *
      * @return self
      */
-    public function min($min)
+    public function min(int | Closure $min): static
     {
         $this->min = $min;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of min
+     */
+    public function getMin(): int
+    {
+        return $this->min;
+    }
+
+
+    /**
+     * Set the value of step
+     *
+     * @return self
+     */
+    public function step(int | Closure $step): static
+    {
+        $this->step = $step;
 
         return $this;
     }
@@ -93,17 +108,18 @@ class InputSliderGroup extends Component
      */
     public function getStep(): int
     {
-        return $this->step;
+        return (int) $this->evaluate($this->step);
     }
 
+
     /**
-     * Set the value of step
+     * Set the value of behaviour
      *
      * @return self
      */
-    public function step($step)
+    public function behaviour(array | Closure $behaviour): static
     {
-        $this->step = $step;
+        $this->behaviour = $behaviour;
 
         return $this;
     }
@@ -113,17 +129,19 @@ class InputSliderGroup extends Component
      */
     public function getBehaviour(): string
     {
-        return implode('-', $this->behaviour);
+        $array = $this->evaluate($this->behaviour);
+
+        return implode('-', $array);
     }
 
     /**
-     * Set the value of behaviour
+     * Set the value of snap
      *
      * @return self
      */
-    public function behaviour(array $behaviour)
+    public function snap(bool | Closure $snap): static
     {
-        $this->behaviour = $behaviour;
+        $this->snap = $snap;
 
         return $this;
     }
@@ -133,17 +151,19 @@ class InputSliderGroup extends Component
      */
     public function getSnap(): bool
     {
-        return $this->snap;
+        return (bool) $this->evaluate($this->snap);
     }
 
     /**
-     * Set the value of snap
+     * Set the value of sliders
      *
      * @return self
      */
-    public function snap(bool $snap)
+    public function sliders(array $sliders): static
     {
-        $this->snap = $snap;
+        $this->sliders = $sliders;
+
+        $this->childComponents($sliders);
 
         return $this;
     }
@@ -156,63 +176,41 @@ class InputSliderGroup extends Component
         return $this->sliders;
     }
 
-    /**
-     * Set the value of sliders
-     *
-     * @return self
-     */
-    public function sliders(array $sliders)
-    {
-        $this->sliders = $sliders;
-
-        $this->childComponents($sliders);
-
-        return $this;
-    }
 
     public function getStates(): array
     {
-
-        $states = [];
-
-        $states = collect($this->getSliders())->map(function ($slider) {
-            $statePath = $slider->getStatePath();
+        return collect($this->getSliders())->map(function ($slider) {
             // return '$wire.' . $this->applyStateBindingModifiers("entangle('{$slider->getStatePath()}', false)", isOptimisticallyLive: false);
 
             return $slider->getStatePath();
         })
-            ->toArray();
-
-        return $states;
+        ->toArray();
     }
 
     public function getStart(): array
     {
-        $start = [];
-
-        $start = collect($this->getSliders())->map(function (InputSlider $slider) {
-            return $slider->getDefaultState();
+        return collect($this->getSliders())->map(function (InputSlider $slider) {
+            return $slider->getState() ?? $slider->getDefaultState();
         })
-            ->toArray();
-
-        return $start;
+        ->toArray();
     }
 
     /**
      * Get the value of connect
      */
-    public function getConnect()
+    public function getConnect(): array|bool
     {
+        $connect = $this->evaluate($this->connect);
 
-        if ($this->connect && is_array($this->connect)) {
-            if (! (count($this->connect) == count($this->getSliders()) + 1)) {
-                throw new Error('connect property must be total sliders + 1 ');
+        if ($connect && is_array($connect)) {
+            if (! (count($connect) == count($this->getSliders()) + 1)) {
+                throw new \InvalidArgumentException('connect property must be total sliders + 1 ');
             }
 
-            return $this->connect;
+            return $connect;
         }
 
-        return $this->connect;
+        return $connect;
     }
 
     /**
@@ -220,7 +218,7 @@ class InputSliderGroup extends Component
      *
      * @return self
      */
-    public function connect(bool | array $connect = true)
+    public function connect(bool | array | Closure $connect = true): static
     {
         $this->connect = $connect;
 
@@ -228,12 +226,26 @@ class InputSliderGroup extends Component
     }
 
     /**
+     * Set the value of range
+     *
+     * @return self
+     */
+    public function range(array | Closure $range): static
+    {
+        $this->range = $range;
+
+        return $this;
+    }
+
+    /**
      * Get the value of range
      */
-    public function getRange()
+    public function getRange(): array|null
     {
-        if ($this->range) {
-            return $this->range;
+        $range = $this->evaluate($this->range);
+
+        if ($range) {
+            return $range;
         }
 
         return [
@@ -242,36 +254,11 @@ class InputSliderGroup extends Component
         ];
     }
 
-    /**
-     * Set the value of range
-     *
-     * @return self
-     */
-    public function range(array $range)
+    public function enableTooltips(bool | Closure $condition = true): static
     {
-        $this->range = $range;
+        $this->hasEnabledTooltips = $condition;
 
         return $this;
-    }
-
-    public function enableTooltips(bool $condition = true)
-    {
-        $this->isEnableTooltips = $condition;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of tooltips
-     */
-    public function getTooltips()
-    {
-
-        if ($this->tooltips) {
-            return $this->tooltips;
-        }
-
-        return array_fill(0, count($this->getSliders()), $this->isEnableTooltips);
     }
 
     /**
@@ -279,10 +266,25 @@ class InputSliderGroup extends Component
      *
      * @return self
      */
-    public function tooltips(array $tooltips)
+    public function tooltips(array | Closure $tooltips): static
     {
         $this->tooltips = $tooltips;
 
         return $this;
+    }
+
+    /**
+     * Get the value of tooltips
+     */
+    public function getTooltips(): array|null
+    {
+        $tooltips = $this->evaluate($this->tooltips);
+        $hasEnabledTooltips = $this->evaluate($this->hasEnabledTooltips);
+
+        if ($tooltips) {
+            return $tooltips;
+        }
+
+        return array_fill(0, count($this->getSliders()), $hasEnabledTooltips);
     }
 }

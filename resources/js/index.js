@@ -1,58 +1,67 @@
 import noUiSlider from 'nouislider';
 
-
 export default function slider({
+  element,
+  start,
+  connect,
+  range = { min: 0, max: 10 },
+  state = [],
+  step,
+  behaviour,
+  snap = false,
+  tooltips = false,
+  onChange = () => {},
+}) {
+  return {
     element,
     start,
     connect,
-    range = {
-        min: 0,
-        max: 10
-    },
+    range,
     state,
     step,
     behaviour,
     snap,
     tooltips,
-    onChange = console.log,
-}) {
-    return {
-        start,
-        element,
-        connect,
-        range,
-        component: null,
-        state,
-        step,
-        behaviour,
-        tooltips,
-        onChange,
-        init() {
-            this.component = document.getElementById(this.element);
-            noUiSlider.cssClasses.target += ' range-slider';
+    component: null,
+    slider: null,
+    _handler: null,
 
-            let slider = noUiSlider.create(this.component, {
-                start: window.Alpine.raw(start),
-                connect: window.Alpine.raw(connect),
-                range: window.Alpine.raw(range),
-                tooltips,
-                step: window.Alpine.raw(step),
-                behaviour: window.Alpine.raw(behaviour),
-                snap: window.Alpine.raw(snap),
-            });
+    init() {
+      this.component = document.getElementById(this.element);
+      if (!this.component) return;
 
-            
-            this.component.noUiSlider.on('update', (values) => {
-                console.log("Values :",values)
+      this.component.classList.add('range-slider');
 
-                document.addEventListener('livewire:load', function () {
-                    setInterval(() => Livewire.dispatch('nextSlot'), 4000);
-                })
+      const raw = (v) =>
+        window.Alpine && typeof window.Alpine.raw === 'function' ? window.Alpine.raw(v) : v;
 
-                for (let i = 0; i < values.length; i++) {
-                    window.Livewire.dispatch(this.state[i], values[i])
-                }
-            });
+      this.slider = noUiSlider.create(this.component, {
+        start: raw(this.start),
+        connect: raw(this.connect),
+        range: raw(this.range),
+        tooltips: this.tooltips,
+        step: raw(this.step),
+        behaviour: raw(this.behaviour),
+        snap: raw(this.snap),
+      });
+
+      // Bind Alpine component context so `this.state` works inside the provided onChange
+      this._handler = (values, handle, unencoded, tap, positions) => {
+        const states = Array.isArray(this.state) ? this.state : [];
+        onChange.call(this, values, handle, unencoded, tap, positions, states);
+      };
+
+      this.slider.on('change', this._handler);
+    },
+
+    destroy() {
+      if (this.slider) {
+        if (this._handler) {
+          this.slider.off('change', this._handler);
         }
-    }
+        this.slider.destroy();
+        this.slider = null;
+      }
+    },
+  };
 }

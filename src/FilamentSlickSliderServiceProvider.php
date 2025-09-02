@@ -52,8 +52,8 @@ class FilamentSlickSliderServiceProvider extends PackageServiceProvider
     protected function getAssets(): array
     {
         return [
-            AlpineComponent::make('filament-slider-scripts', __DIR__ . '/../resources/dist/components/filament-slider.js'),
-            Css::make('filament-slider-styles', __DIR__ . '/../resources/dist/filament-slider.css'),
+            AlpineComponent::make('filament-slick-slider-scripts', __DIR__ . '/../resources/dist/components/filament-slider.js'),
+            Css::make('filament-slick-slider-styles', __DIR__ . '/../resources/dist/filament-slider.css'),
             Css::make('filament-slider', __DIR__ . '/../resources/dist/components/filament-slider.css'),
         ];
     }
