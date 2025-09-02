@@ -72,6 +72,26 @@ InputSliderGroup::make()
 ->label('Limit')
 ```
 
+### Default Value
+
+```php
+InputSliderGroup::make()
+    ->sliders([
+        InputSlider::make('starting')
+            ->default(50),
+        InputSlider::make('ending')
+            ->default(70)
+    ])
+    ->range(["min" => 30, "max" => 100])
+    ->step(10)
+    ->behaviour([
+        InputSliderBehaviour::DRAG,
+        InputSliderBehaviour::TAP
+    ])
+    ->enableTooltips()
+    ->label('Limit')
+```
+
 
 ### Complete
 

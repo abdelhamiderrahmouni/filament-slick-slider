@@ -87,7 +87,7 @@ class InputSliderGroup extends Component
      */
     public function getMin(): int
     {
-        return $this->min;
+        return (int) $this->evaluate($this->min);
     }
 
 
