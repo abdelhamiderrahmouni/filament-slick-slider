@@ -1,6 +1,6 @@
 {
     "name": "abdelhamiderrahmouni/filament-slick-slider",
-    "description": "Slide into Precision – Customizable Control at Your Fingertips.",
+    "description": "A Slick Slider for your filament v3 forms.",
     "keywords": [
         "laravel", "filament", "slick", "slider",
         "forms", "form-field", "form-builder",
