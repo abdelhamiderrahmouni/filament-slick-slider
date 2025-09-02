@@ -1,0 +1,73 @@
+{
+    "name": "abdelhamiderrahmouni/filament-slick-slider",
+    "description": "Slide into Precision – Customizable Control at Your Fingertips.",
+    "keywords": [
+        "laravel", "filament", "slick", "slider",
+        "forms", "form-field", "form-builder",
+        "filament-forms", "slick-slider"
+    ],
+    "homepage": "https://github.com/abdelhamiderrahmouni/filament-slick-slider",
+    "support": {
+        "issues": "https://github.com/abdelhamiderrahmouni/filament-slick-slider/issues",
+        "source": "https://github.com/abdelhamiderrahmouni/filament-slick-slider"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Abdelhamid Errahmouni",
+            "email": "abdelhamiderrahmouni@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "filament/forms": "^3.2",
+        "spatie/laravel-package-tools": "^1.9",
+        "illuminate/contracts": "^10.0|^11.0|^12.0"
+    },
+    "require-dev": {
+        "larastan/larastan": "^3.6",
+        "laravel/pint": "^1.24",
+        "nunomaduro/collision": "^8.8",
+        "orchestra/testbench": "^10.6",
+        "pestphp/pest": "^3.8",
+        "pestphp/pest-plugin-laravel": "^3.2",
+        "phpunit/phpunit": "^11.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "AbdelhamidErrahmouni\\FilamentSlickSlider\\": "src/",
+            "AbdelhamidErrahmouni\\FilamentSlickSlider\\Database\\Factories\\": "database/factories/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AbdelhamidErrahmouni\\FilamentSlickSlider\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/pest --no-coverage",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "format": "vendor/bin/pint",
+        "finalize": "composer format && composer test"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "AbdelhamidErrahmouni\\FilamentSlickSlider\\FilamentSlickSliderServiceProvider"
+            ],
+            "aliases": {
+                "FilamentSlickSlider": "AbdelhamidErrahmouni\\FilamentSlickSlider\\Facades\\FilamentSlickSlider"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
