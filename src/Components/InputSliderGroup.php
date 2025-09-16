@@ -2,6 +2,12 @@
 
 namespace AbdelhamidErrahmouni\FilamentSlickSlider\Components;
 
+use AbdelhamidErrahmouni\FilamentSlickSlider\Components\Concerns\HasBehaviour;
+use AbdelhamidErrahmouni\FilamentSlickSlider\Components\Concerns\HasRange;
+use AbdelhamidErrahmouni\FilamentSlickSlider\Components\Concerns\HasSliders;
+use AbdelhamidErrahmouni\FilamentSlickSlider\Components\Concerns\HasSnap;
+use AbdelhamidErrahmouni\FilamentSlickSlider\Components\Concerns\HasStep;
+use AbdelhamidErrahmouni\FilamentSlickSlider\Components\Concerns\HasTooltips;
 use Closure;
 use Error;
 use Filament\Forms\Components\Component;
@@ -18,6 +24,12 @@ class InputSliderGroup extends Component
     use HasHelperText;
     use HasHint;
     use HasLabel;
+    use HasBehaviour;
+    use HasRange;
+    use HasSliders;
+    use HasSnap;
+    use HasStep;
+    use HasTooltips;
 
     protected string $view = 'filament-slider::components.input-slider';
 
@@ -25,21 +37,7 @@ class InputSliderGroup extends Component
 
     protected int | Closure $min = 0;
 
-    protected int | Closure $step = 1;
-
-    protected array | Closure $behaviour = ['drag', 'tap'];
-
-    protected array | Closure $sliders = [];
-
-    protected bool | Closure $snap = false;
-
     protected bool | array | Closure $connect = true;
-
-    protected array | Closure | null $range = null;
-
-    protected array | Closure | null $tooltips = null;
-
-    protected bool $hasEnabledTooltips = false;
 
     public static function make(?string $label = null): static
     {
@@ -90,93 +88,6 @@ class InputSliderGroup extends Component
         return (int) $this->evaluate($this->min);
     }
 
-
-    /**
-     * Set the value of step
-     *
-     * @return self
-     */
-    public function step(int | Closure $step): static
-    {
-        $this->step = $step;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of step
-     */
-    public function getStep(): int
-    {
-        return (int) $this->evaluate($this->step);
-    }
-
-
-    /**
-     * Set the value of behaviour
-     *
-     * @return self
-     */
-    public function behaviour(array | Closure $behaviour): static
-    {
-        $this->behaviour = $behaviour;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of behaviour
-     */
-    public function getBehaviour(): string
-    {
-        $array = $this->evaluate($this->behaviour);
-
-        return implode('-', $array);
-    }
-
-    /**
-     * Set the value of snap
-     *
-     * @return self
-     */
-    public function snap(bool | Closure $snap): static
-    {
-        $this->snap = $snap;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of snap
-     */
-    public function getSnap(): bool
-    {
-        return (bool) $this->evaluate($this->snap);
-    }
-
-    /**
-     * Set the value of sliders
-     *
-     * @return self
-     */
-    public function sliders(array $sliders): static
-    {
-        $this->sliders = $sliders;
-
-        $this->childComponents($sliders);
-
-        return $this;
-    }
-
-    /**
-     * Get the value of sliders
-     */
-    public function getSliders(): array
-    {
-        return $this->sliders;
-    }
-
-
     public function getStates(): array
     {
         return collect($this->getSliders())->map(function ($slider) {
@@ -223,68 +134,5 @@ class InputSliderGroup extends Component
         $this->connect = $connect;
 
         return $this;
-    }
-
-    /**
-     * Set the value of range
-     *
-     * @return self
-     */
-    public function range(array | Closure $range): static
-    {
-        $this->range = $range;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of range
-     */
-    public function getRange(): array|null
-    {
-        $range = $this->evaluate($this->range);
-
-        if ($range) {
-            return $range;
-        }
-
-        return [
-            'min' => $this->getMin(),
-            'max' => $this->getMax(),
-        ];
-    }
-
-    public function enableTooltips(bool | Closure $condition = true): static
-    {
-        $this->hasEnabledTooltips = $condition;
-
-        return $this;
-    }
-
-    /**
-     * Set the value of tooltips
-     *
-     * @return self
-     */
-    public function tooltips(array | Closure $tooltips): static
-    {
-        $this->tooltips = $tooltips;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of tooltips
-     */
-    public function getTooltips(): array|null
-    {
-        $tooltips = $this->evaluate($this->tooltips);
-        $hasEnabledTooltips = $this->evaluate($this->hasEnabledTooltips);
-
-        if ($tooltips) {
-            return $tooltips;
-        }
-
-        return array_fill(0, count($this->getSliders()), $hasEnabledTooltips);
     }
 }
