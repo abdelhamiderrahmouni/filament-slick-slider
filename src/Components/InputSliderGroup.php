@@ -16,6 +16,7 @@ use Filament\Forms\Components\Concerns\HasChildComponents;
 use Filament\Forms\Components\Concerns\HasHelperText;
 use Filament\Forms\Components\Concerns\HasHint;
 use Filament\Forms\Components\Concerns\HasLabel;
+use Filament\Support\RawJs;
 
 class InputSliderGroup extends Component
 {
@@ -36,6 +37,8 @@ class InputSliderGroup extends Component
     protected int | Closure $max = 10;
 
     protected int | Closure $min = 0;
+
+    protected RawJs | Closure | string | null $format = null;
 
     protected bool | array | Closure $connect = true;
 
@@ -134,5 +137,17 @@ class InputSliderGroup extends Component
         $this->connect = $connect;
 
         return $this;
+    }
+
+    public function format(RawJs | Closure | string | null $format = null): static
+    {
+        $this->format = $format;
+
+        return $this;
+    }
+
+    public function getFormat(): RawJs | null
+    {
+        return RawJs::make($this->evaluate($this->format));
     }
 }

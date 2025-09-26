@@ -10,6 +10,7 @@ export default function slider({
   behaviour,
   snap = false,
   tooltips = false,
+  format = null,
   onChange = () => {},
 }) {
   return {
@@ -22,6 +23,7 @@ export default function slider({
     behaviour,
     snap,
     tooltips,
+    format,
     component: null,
     slider: null,
     _handler: null,
@@ -43,6 +45,7 @@ export default function slider({
         step: raw(this.step),
         behaviour: raw(this.behaviour),
         snap: raw(this.snap),
+        format: this.format,
       });
 
       // Bind Alpine component context so `this.state` works inside the provided onChange
