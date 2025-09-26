@@ -23,7 +23,7 @@ trait HasRange
     /**
      * Get the value of range
      */
-    public function getRange(): array|null
+    public function getRange(): ?array
     {
         $range = $this->evaluate($this->range);
 
@@ -36,5 +36,4 @@ trait HasRange
             'max' => $this->getMax(),
         ];
     }
-
 }

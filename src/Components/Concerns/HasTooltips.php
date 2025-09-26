@@ -7,7 +7,7 @@ use Closure;
 trait HasTooltips
 {
     protected array | Closure | null $tooltips = null;
-    
+
     protected bool $hasEnabledTooltips = false;
 
     public function enableTooltips(bool | Closure $condition = true): static
@@ -32,7 +32,7 @@ trait HasTooltips
     /**
      * Get the value of tooltips
      */
-    public function getTooltips(): array|null
+    public function getTooltips(): ?array
     {
         $tooltips = $this->evaluate($this->tooltips);
         $hasEnabledTooltips = $this->evaluate($this->hasEnabledTooltips);

@@ -9,7 +9,6 @@ use AbdelhamidErrahmouni\FilamentSlickSlider\Components\Concerns\HasSnap;
 use AbdelhamidErrahmouni\FilamentSlickSlider\Components\Concerns\HasStep;
 use AbdelhamidErrahmouni\FilamentSlickSlider\Components\Concerns\HasTooltips;
 use Closure;
-use Error;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\Concerns\CanBeValidated;
 use Filament\Forms\Components\Concerns\HasChildComponents;
@@ -21,11 +20,11 @@ use Filament\Support\RawJs;
 class InputSliderGroup extends Component
 {
     use CanBeValidated;
+    use HasBehaviour;
     use HasChildComponents;
     use HasHelperText;
     use HasHint;
     use HasLabel;
-    use HasBehaviour;
     use HasRange;
     use HasSliders;
     use HasSnap;
@@ -98,7 +97,7 @@ class InputSliderGroup extends Component
 
             return $slider->getStatePath();
         })
-        ->toArray();
+            ->toArray();
     }
 
     public function getStart(): array
@@ -106,13 +105,13 @@ class InputSliderGroup extends Component
         return collect($this->getSliders())->map(function (InputSlider $slider) {
             return $slider->getState() ?? $slider->getDefaultState();
         })
-        ->toArray();
+            ->toArray();
     }
 
     /**
      * Get the value of connect
      */
-    public function getConnect(): array|bool
+    public function getConnect(): array | bool
     {
         $connect = $this->evaluate($this->connect);
 
@@ -146,7 +145,7 @@ class InputSliderGroup extends Component
         return $this;
     }
 
-    public function getFormat(): RawJs | null
+    public function getFormat(): ?RawJs
     {
         $formatString = $this->evaluate($this->format);
 
