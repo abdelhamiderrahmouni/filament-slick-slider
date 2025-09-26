@@ -148,6 +148,12 @@ class InputSliderGroup extends Component
 
     public function getFormat(): RawJs | null
     {
-        return RawJs::make($this->evaluate($this->format));
+        $formatString = $this->evaluate($this->format);
+
+        if ($formatString) {
+            return RawJs::make($formatString);
+        }
+
+        return null;
     }
 }
