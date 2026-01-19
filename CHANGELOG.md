@@ -2,6 +2,15 @@
 
 All notable changes to `filament-slider` will be documented in this file.
 
+## [0.3.0](https://github.com/abdelhamiderrahmouni/filament-slick-slider/releases/tag/v0.3.0) (2026-01-19)
+
+### Features
+
+- add disabled option to InputSliderGroup and handle slider disabling ([5ade97d](https://github.com/abdelhamiderrahmouni/filament-slick-slider/commit/5ade97d5794490ada3b1a39e8d96bcdea98dad8e))
+
+### Chores
+
+- **deps:** bump dependabot/fetch-metadata from 1.6.0 to 2.5.0 ([b0e43c3](https://github.com/abdelhamiderrahmouni/filament-slick-slider/commit/b0e43c3ae6467b279a8d3f008fdeb0c9b241d3c9))
 ## 1.0.2 - 2025-03-03
 
 ### What's Changed
