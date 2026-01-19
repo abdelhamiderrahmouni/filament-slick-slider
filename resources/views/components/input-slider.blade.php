@@ -36,6 +36,7 @@
             snap:@js($getSnap()),
             tooltips: @js($getTooltips()),
             format: @js($getFormat()),
+            disabled: @js($isDisabled()),
             onChange(values, handle, unencoded, tap, positions, states) {
                 const nums = values.map((v) => {
                     const n = parseFloat(v);

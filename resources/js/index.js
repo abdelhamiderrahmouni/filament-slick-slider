@@ -11,6 +11,7 @@ export default function slider({
   snap = false,
   tooltips = false,
   format = null,
+  disabled = false,
   onChange = () => {},
 }) {
   return {
@@ -24,6 +25,7 @@ export default function slider({
     snap,
     tooltips,
     format,
+    disabled,
     component: null,
     slider: null,
     _handler: null,
@@ -47,6 +49,10 @@ export default function slider({
         snap: raw(this.snap),
         format: this.format,
       });
+
+      if (this.disabled) {
+        this.slider.disable();
+      }
 
       // Bind Alpine component context so `this.state` works inside the provided onChange
       this._handler = (values, handle, unencoded, tap, positions) => {
